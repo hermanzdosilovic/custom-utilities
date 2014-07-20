@@ -12,7 +12,6 @@ import java.util.List;
  * with <code>Comparable</code> types. On this collection you can ask for <code>nextPermutation</code>. This function
  * will generate next permutation of elements in this collection and will return <code>true</code> if more permutations
  * are available.
- * 
  * @author Herman Zvonimir Došilović
  * @version 1.0
  * @param <T>
@@ -20,98 +19,97 @@ import java.util.List;
  */
 public class Permutation<T extends Comparable<T>> extends AbstractList<T> {
 
-	/** Working set of elements. **/
-	private List<T> elements;
+    /** Working set of elements. **/
+    private List<T> workElements;
 
-	/** Initial set of elements given by user. **/
-	private List<T> initialElements;
+    /** Initial set of elements given by user. **/
+    private List<T> initialElements;
 
-	/** Sorted set of initial elements. **/
-	private List<T> sortedElements;
+    /** Sorted set of initial elements. **/
+    private List<T> sortedElements;
 
-	/** If <code>true</code> user gave sorted elements, <code>false</code> otherwise. **/
-	private boolean fromBegin;
+    /** If <code>true</code> user gave sorted elements, <code>false</code> otherwise. **/
+    private boolean fromBegin;
 
-	/**
-	 * Constructs new <code>Permutation</code> collection.
-	 * 
-	 * @param elements
-	 *            array of elements.
-	 */
-	@SafeVarargs
-	public Permutation(T... elements) {
-		this(Arrays.asList(elements));
-	}
+    /**
+     * Constructs new <code>Permutation</code> collection.
+     * @param elements
+     *            array of elements.
+     */
+    @SafeVarargs
+    public Permutation(final T... elements) {
+        this(Arrays.asList(elements));
+    }
 
-	/**
-	 * Constructs new <code>Permutation</code> collection. Will make its own copy of elements.
-	 * 
-	 * @param elements
-	 *            collection from which it needs to take over elements.
-	 */
-	public Permutation(Collection<T> elements) {
-		this.elements = new ArrayList<>(elements);
-		this.initialElements = new ArrayList<>(elements);
-		this.sortedElements = new ArrayList<>(elements);
-		Collections.sort(sortedElements);
-		fromBegin = this.elements.equals(this.sortedElements);
-	}
+    /**
+     * Constructs new <code>Permutation</code> collection. Will make its own copy of elements.
+     * @param elements
+     *            collection from which it needs to take over elements.
+     */
+    public Permutation(final Collection<T> elements) {
+        super();
+        this.workElements = new ArrayList<>(elements);
+        this.initialElements = new ArrayList<>(elements);
+        this.sortedElements = new ArrayList<>(elements);
+        Collections.sort(sortedElements);
+        fromBegin = this.workElements.equals(this.sortedElements);
+    }
 
-	/**
-	 * Generates next permutation of elements it this collection.
-	 * 
-	 * @return <code>true</code> if more permutations are available, <code>false</code> otherwise.
-	 */
-	public boolean nextPermutation() {
-		int i, j;
-		for (i = elements.size() - 2; i >= 0; i--) {
-			if (elements.get(i).compareTo(elements.get(i + 1)) < 0) {
-				break;
-			}
-		}
+    /**
+     * Generates next permutation of elements it this collection.
+     * @return <code>true</code> if more permutations are available, <code>false</code> otherwise.
+     */
+    public final boolean nextPermutation() {
+        int i;
+        for (i = workElements.size() - 2; i >= 0; i--) {
+            if (workElements.get(i).compareTo(workElements.get(i + 1)) < 0) {
+                break;
+            }
+        }
 
-		if (i < 0) {
-			if (fromBegin) {
-				elements = new ArrayList<>(initialElements);
-				return false;
-			}
-			elements = new ArrayList<>(sortedElements);
-			return true;
-		}
+        if (i < 0) {
+            if (fromBegin) {
+                workElements = new ArrayList<>(initialElements);
+                return false;
+            }
+            workElements = new ArrayList<>(sortedElements);
+            return true;
+        }
 
-		int minn = i + 1;
-		for (j = i + 1; j < elements.size(); j++) {
-			if (elements.get(i).compareTo(elements.get(j)) < 0 && elements.get(j).compareTo(elements.get(minn)) < 0) {
-				minn = j;
-			}
-		}
+        int minn = i + 1;
+        for (int j = i + 1; j < workElements.size(); j++) {
+            if (workElements.get(i).compareTo(workElements.get(j)) < 0
+                    && workElements.get(j).compareTo(workElements.get(minn)) < 0) {
+                minn = j;
+            }
+        }
 
-		T element = elements.get(minn);
-		elements.set(minn, elements.get(i));
-		elements.set(i, element);
+        T element = workElements.get(minn);
+        workElements.set(minn, workElements.get(i));
+        workElements.set(i, element);
 
-		Collections.sort(elements.subList(i + 1, elements.size()));
-		if (fromBegin == false && elements.equals(initialElements)) {
-			return false;
-		}
-		return true;
-	}
+        Collections.sort(workElements.subList(i + 1, workElements.size()));
+        if (!fromBegin && workElements.equals(initialElements)) {
+            return false;
+        }
+        return true;
+    }
 
-	/**
-	 * Resets this collection to its initial order.
-	 */
-	public void reset() {
-		this.elements = new ArrayList<>(initialElements);
-	}
+    /**
+     * Resets this collection to its initial order.
+     */
+    public final void reset() {
+        this.workElements = new ArrayList<>(initialElements);
+    }
 
-	@Override
-	public T get(int index) {
-		return elements.get(index);
-	}
+    @Override
+    public final T get(final int index) {
+        return workElements.get(index);
+    }
 
-	@Override
-	public int size() {
-		return elements.size();
-	}
+    @Override
+    public final int size() {
+        return workElements.size();
+    }
 
 }

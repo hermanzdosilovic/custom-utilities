@@ -8,17 +8,23 @@ import com.github.hermanzdosilovic.java.util.Permutation;
  */
 public final class PermutationExample1 {
 
-	/**
-	 * Program entry. Does not use command line arguments.
-	 * 
-	 * @param args
-	 *            command line arguments. Not is use.
-	 */
-	public static void main(String[] args) {
-		Permutation<Integer> permutation = new Permutation<>(1, 2, 3);
-		do {
-			System.out.println(permutation);
-		} while (permutation.nextPermutation());
-	}
+    /**
+     * Private constructor.
+     */
+    private PermutationExample1() {
+        throw new UnsupportedOperationException("Cannot instantiate utility class.");
+    }
+
+    /**
+     * Program entry. Does not use command line arguments.
+     * @param args
+     *            command line arguments. Not is use.
+     */
+    public static void main(final String[] args) {
+        final Permutation<Integer> permutation = new Permutation<>(1, 2, 3);
+        do {
+            System.out.println(permutation);
+        } while (permutation.nextPermutation());
+    }
 
 }
