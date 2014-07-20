@@ -2,7 +2,7 @@
 	xmlns:cs="antlib:com.puppycrawl.tools.checkstyle" xmlns:jacoco="antlib:org.jacoco.ant">
 
 	<description>
-		Build file for project custom-utilities.
+		Build file for project Custom Utilities.
 	</description>
 
 	<!-- Global variables -->
@@ -15,7 +15,7 @@
 	<property name="build.classes" location="${build}/classes" />
 	<property name="build.test" location="${build}/test" />
 	<property name="dist" location="dist" />
-	<property name="dist.lib" location="${dist}/lib" />
+	<property name="doc" location="doc" />
 	<property name="program"
 		value="com.github.hermanzdosilovic.examples.PermutationExample1" />
 
@@ -149,10 +149,10 @@
 	<!-- *********************** JAR ********************************* -->
 	<target name="jar" depends="compile" description="Pack program in archive JAR">
 		<!-- Make distribution directory -->
-		<mkdir dir="${dist.lib}" />
+		<mkdir dir="${dist}" />
 
 		<!-- Archive all -->
-		<jar jarfile="${dist.lib}/${ant.project.name}-all.jar">
+		<jar jarfile="${dist}/${ant.project.name}-all.jar">
 			<fileset dir="${build.classes}" />
 			<fileset dir="${src.java}" />
 			<manifest>
@@ -161,7 +161,7 @@
 		</jar>
 
 		<!-- Archive binary for all -->
-		<jar jarfile="${dist.lib}/${ant.project.name}-bin-all.jar">
+		<jar jarfile="${dist}/${ant.project.name}-bin-all.jar">
 			<fileset dir="${build.classes}" />
 			<manifest>
 				<attribute name="Main-Class" value="${program}" />
@@ -169,7 +169,7 @@
 		</jar>
 		
 		<!-- Archive source for all -->
-		<jar jarfile="${dist.lib}/${ant.project.name}-src-all.jar">
+		<jar jarfile="${dist}/${ant.project.name}-src-all.jar">
 			<fileset dir="${src.java}" />
 			<manifest>
 				<attribute name="Main-Class" value="${program}" />
@@ -177,18 +177,18 @@
 		</jar>
 		
 		<!-- Archive all utilities package -->
-		<jar jarfile="${dist.lib}/util-all.jar">
+		<jar jarfile="${dist}/util-all.jar">
 			<fileset dir="${build.classes}" includes="**/util/" />
 			<fileset dir="${src.java}" includes="**/util/" />
 		</jar>
 
 		<!-- Archive bin utilities package -->
-		<jar jarfile="${dist.lib}/util-bin.jar">
+		<jar jarfile="${dist}/util-bin.jar">
 			<fileset dir="${build.classes}" includes="**/util/" />
 		</jar>
 		
 		<!-- Archive src utilities package -->
-		<jar jarfile="${dist.lib}/util-src.jar">
+		<jar jarfile="${dist}/util-src.jar">
 			<fileset dir="${src.java}" includes="**/util/" />
 		</jar>
 		
@@ -200,13 +200,14 @@
 		<!-- Delete directories ${build} and ${dist} -->
 		<delete dir="${build}" failonerror="false" />
 		<delete dir="${dist}" failonerror="false" />
+		<delete dir="${doc}" failonerror="false" />
 	</target>
 
 
 	<!-- *********************** JARRUN ****************************** -->
 	<target name="jarrun" depends="jar" description="Run program from JAR">
 		<!-- Call virtual machine to run program -->
-		<java classname="${program}" classpath="${dist.lib}/${ant.project.name}-all.jar"
+		<java classname="${program}" classpath="${dist}/${ant.project.name}-all.jar"
 			fork="true">
 			<jvmarg value="-Dfile.encoding=IBM852" />
 		</java>
@@ -216,9 +217,9 @@
 	<!-- *********************** JAVADOC ***************************** -->
 	<target name="javadoc" depends="compile" description="Generating documentation">
 		<!-- Make distribution directory -->
-		<mkdir dir="${dist}/doc" />
+		<mkdir dir="${doc}" />
 		<javadoc packagenames="com.*" sourcepath="${src.java}"
-			defaultexcludes="yes" destdir="${dist}/doc"
+			defaultexcludes="yes" destdir="${doc}"
 			Encoding="UTF-8" docencoding="UTF-8" charset="UTF-8" author="true"
 			version="true" use="true" windowtitle="Custom Utilities documentation">
 			<doctitle><![CDATA[<h1>Custom Utilities</h1>]]></doctitle>
@@ -331,6 +332,10 @@
 
 	<!-- *********************** REPORTS ***************************** -->
 	<target name="reports" depends="quality, javadoc, jar">
+	</target>
+
+	<!-- *********************** GITINIT ***************************** -->
+	<target name="gitinit" depends="clean, javadoc, jar">
 	</target>
 
 </project>
