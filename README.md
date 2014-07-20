@@ -1,4 +1,4 @@
-custom-utilities
+Custom Utilities
 ================
 
 Custom Utilities for Java Projects
